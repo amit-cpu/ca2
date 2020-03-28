@@ -1,0 +1,149 @@
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+int main()
+{
+  printf("\t\t\t----------------------- Scheduling -----------------------\n\n\n\n"); //complexity=O(1)
+  long int n,i=0,j=0; //complexity=O(1)
+  printf("Enter Number of Processes : "); //complexity=O(1)
+  scanf("%ld",&n ); //%ld is use for long double //complexity=O(1)
+  double pri[n],avg_waiting,avg_ta,bt[n],at[n],wt[n],tat[n], p[n], temp, ct[n],min,sum=0,sum2=0,wait_final, ta_final, wait_avg, ta_avg; //complexity=O(1)
+  //bt=BurstTime,at=arrival time, wt=waiting time,tat=turnaround , p=proccess,, ct=complition time ,,pri=priority, ta=turnaround
+  for(i=0;i<n;i++) //complexity=O(n)
+  {
+    printf("\nEnter Burst Time for Process [%d] : ", i+1 ); //complexity=O(1)
+    scanf("%lf", &bt[i]); // long float  //complexity=O(1)
+    printf("Enter Arrival Time for Process [%d] : ", i+1 ); //complexity=O(1)
+    scanf("%lf", &at[i] ); //complexity=O(1)
+    p[i]=i+1; //complexity=O(1)
+  }
+
+  printf("\n\n\t\t\t -------------- Entered proccess Values are --------------\n\n"); //complexity=O(1)
+  printf("\t\t\t---------------------------------------\n"); //complexity=O(1)
+  printf("\t\t\t| Process | Arrival Time | Burst Time |\n"); //complexity=O(1)
+  printf("\t\t\t---------------------------------------\n"); //complexity=O(1)
+  for(i=0;i<n;i++) // complexity=O(n)
+  {
+    printf("\t\t\t|  P[%0.0lf]   |       %0.0lf      |     %0.0lf      |\n",p[i],at[i],bt[i]); //complexity=O(1)
+  } 
+    printf("\t\t\t---------------------------------------\n"); //complexity=O(1)
+
+
+  printf("\n\n\t\t\t-------- Sorting Processes according to Arrivaltime --------\n"); //complexity=O(1)
+
+  for(i=0;i<n;i++) //complexity= O(n)
+  {
+    for(j=0;j<n;j++) //Complexity=O(n^2)
+    {
+      if(at[i]<at[j]) //complexity=O(n^3)
+      {
+        
+        temp = bt[j]; //complexity=O(1)
+        bt[j] = bt[i]; //complexity=O(1)
+        bt [i] = temp; //complexity=O(1)
+	
+	    temp = p[j]; //complexity=O(1)
+        p[j] = p[i]; //complexity=O(1) 
+        p[i] = temp; //complexity=O(1) 
+
+	    temp = at[j]; //complexity=O(1)
+        at[j] = at[i]; //complexity=O(1)
+        at[i] = temp; //complexity=O(1)
+      
+      }
+    }
+  }
+  printf("\n\n\t\t\t -------------- Now Values are --------------\n\n"); //complexity=O(1)
+  printf("\t\t\t---------------------------------------\n"); //complexity=O(1)
+  printf("\t\t\t| Process | Arrival Time | Burst Time |\n"); //complexity=O(1)
+  printf("\t\t\t---------------------------------------\n"); //complexity=O(1)
+  for(i=0;i<n;i++) //complexity=O(n)
+  {
+    printf("\t\t\t|  P[%0.0lf]   |       %0.0lf      |     %0.0lf      |\n",p[i],at[i],bt[i]); //complexity=O(1)
+  }
+    printf("\t\t\t---------------------------------------\n"); //complexity=O(1)
+
+// AQTArranging the table according to Burst time,Execution time and Arrival Time Arrival time <= Execution time
+  long int o = 1; //complexity=O(1)
+  double burst_time = 0; //complexity=O(1)
+  for(j=0;j<n;j++) //complexity=O(n)
+  {
+    burst_time = burst_time + bt[j]; //complexity=O(1)
+    min = bt[o]; //complexity=O(1)
+
+    for(i=o;i<n;i++) //complexity=O(n^2)
+    {
+      if((burst_time >= at[i])&&(bt[i]<min)) //complexity=O(n^2)
+      {
+        temp = bt[o];  //complexity=O(1)
+        bt[o] = bt[i]; //complexity=O(1)
+        bt[i] = temp; //complexity=O(1)
+
+        temp = at[o]; //complexity=O(1)
+        at[o] = at[i]; //complexity=O(1)
+        at[i] = temp; //complexity=O(1)
+
+        temp = p[o]; //complexity=O(1)
+        p[o] = p[i]; //complexity=O(1)
+        p[i] = temp; //complexity=O(1)
+      }
+    }
+    o++; //complexity=O(1)
+  }
+  wt[0] = 0; //complexity=O(1)
+  for(i=1;i<n;i++) //complexity=O(n)
+  {
+    sum += bt[i-1]; //complexity=O(1)
+    wt[i] = sum - at[i]; //complexity=O(1)
+    wait_final += wt[i];  //complexity=O(1)
+  }
+  wait_avg = wait_final/n; //complexity=O(1)
+  for(i=0;i<n;i++) //complexity=O(n)
+  {
+    sum2 += bt[i]; //complexity=O(1)    
+    tat[i] = sum2 - at[i]; //complexity=O(1)
+    ta_final += tat[i]; //complexity=O(1)
+  }
+  ta_avg=ta_final/n; //complexity=O(1)
+  printf("\n\n\t\t\t -------------- Now Values are --------------\n\n"); //complexity=O(1)
+  printf("\t\t\t-----------------------------------------------------------------------------\n"); //complexity=O(1)
+  printf("\t\t\t| Process | Arrival Time | Burst Time |  Waiting Time  |  Turn Around Time  |\n"); //complexity=O(1)
+  printf("\t\t\t-----------------------------------------------------------------------------\n"); //complexity=O(1)
+  for(i=0;i<n;i++) //complexity=O(n)
+  {
+    printf("\t\t\t|  P[%0.0lf]   |       %0.0lf      |     %0.0lf      |        %0.0lf       |         %0.0lf          |\n",p[i],at[i],bt[i],wt[i],tat[i]);//complexity=O(1)
+  }
+    printf("\t\t\t-----------------------------------------------------------------------------\n"); //complexity=O(1)
+
+  /*Now we are given with  priority fynction according to the quetion the formula is:-
+      Priority = 1+ Waiting time / Estimated run time(burst time)*/
+ 
+  ct[0] = bt[0]; //complexity=O(1)
+  for(i=1;i<n;i++) //complexity=O(n)
+  {
+    ct[i] = ct[i-1] + bt[i]; //complexity=O(1)
+  }
+
+  for(i=0;i<n;i++) //complexity=O(n)
+  {
+    pri[i] = 1+wt[i]/ct[i];//complexity=O(1)
+    printf("%lf\n",pri[i]);//complexity=O(1)
+  }
+
+  printf("\n\n\t\t\t ------------ Final Values are ------------\n\n");//complexity=O(1)
+  printf("\t\t\t-----------------------------------------------------------------------------\n"); //complexity=O(1)
+  printf("\t\t\t| Process | Arrival Time | Burst Time |  Waiting Time  |  Turn Around Time  |\n");//complexity=O(1)
+  printf("\t\t\t-----------------------------------------------------------------------\n");//complexity=O(1)
+  printf("\t\t\t|  P[%0.0lf]   |       %0.0lf      |     %0.0lf      |        %0.0lf       |         %0.0lf          |\n",p[0],at[0],bt[0],wt[0],tat[0]);//complexity=O(1)
+  for(i=n-1;i>0;i--) //complexity=O(n)
+  {
+    printf("\t\t\t|  P[%0.0lf]   |       %0.0lf      |     %0.0lf      |        %0.0lf       |         %0.0lf          |\n",p[i],at[i],bt[i],wt[i],tat); //complexity=O(1)
+  }
+    printf("\t\t\t-----------------------------------------------------------------------\n");//complexity=O(1)
+
+  printf("\n\n\n\t\t\tAverage Turn Around Time : %lf",ta_avg); //%lf is used for long float//complexity=O(1)
+  printf("\n\t\t\tAverage Waiting Time     : %lf\n\n",wait_avg);//complexity=O(1)
+	
+  getch();//complexity=O(1)
+  return 0;//complexity=O(1)
+}
